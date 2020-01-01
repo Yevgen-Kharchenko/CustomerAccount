@@ -27,7 +27,6 @@ public class CustomerController {
             Optional<Customer> customer = customerRepo.findById(id);
             return customer.isPresent() ? ResponseEntity.ok(customer.get()) : (ResponseEntity<Customer>) ResponseEntity.ok();
         }
-
         return (ResponseEntity<Customer>) ResponseEntity.ok();
     }
 

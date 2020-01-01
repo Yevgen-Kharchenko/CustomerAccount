@@ -12,7 +12,6 @@ import java.io.Serializable;
 @Getter
 @Builder
 @RedisHash
-
 @Setter
 public class Customer implements Serializable {
     private String id;
@@ -21,6 +20,4 @@ public class Customer implements Serializable {
     private String phone;
     private String login;
     private String password;
-
-
 }
