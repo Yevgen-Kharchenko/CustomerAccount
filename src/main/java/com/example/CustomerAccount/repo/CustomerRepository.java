@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Map;
 
-@Repository
+@Repository("customRepository")
 public class CustomerRepository {
     public static final String KEY = "ACCOUNT";
     private RedisTemplate<String, Customer> redisTemplate;
@@ -18,23 +18,23 @@ public class CustomerRepository {
         hashOperations = redisTemplate.opsForHash();
     }
 
-    public Map<Integer,Customer> getAllCustomers(){
+    public Map<Integer, Customer> getAllCustomers() {
         return hashOperations.entries(KEY);
     }
 
-    public Customer getCustomer(int itemId){
-        return (Customer) hashOperations.get(KEY,itemId);
+    public Customer getCustomer(Long id) {
+        return (Customer) hashOperations.get(KEY, id);
     }
 
-    public void addCustomer(Customer customer){
-        hashOperations.put(KEY,customer.getId(),customer);
+    public void addCustomer(Customer customer) {
+        hashOperations.put(KEY, customer.getId(), customer);
     }
 
-    public void deleteCustomer(Long id){
-        hashOperations.delete(KEY,id);
+    public void deleteCustomer(Long id) {
+        hashOperations.delete(KEY, id);
     }
 
-    public void updateCustomer(Customer customer){
+    public void updateCustomer(Customer customer) {
         addCustomer(customer);
     }
 }

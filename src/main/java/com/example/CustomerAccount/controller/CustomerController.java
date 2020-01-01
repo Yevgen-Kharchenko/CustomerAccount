@@ -1,57 +1,65 @@
 package com.example.CustomerAccount.controller;
 
 import com.example.CustomerAccount.model.Customer;
-import com.example.CustomerAccount.repo.CustomerRepository;
+import com.example.CustomerAccount.repo.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Map;
+import java.util.Optional;
 
+@RequestMapping("/customer")
 @RestController
 public class CustomerController {
+
     @Autowired
-    CustomerRepository customerRepo;
+    CustomerRepo customerRepo;
 
-    @RequestMapping("/getAllCustomers")
-    @ResponseBody
-    public ResponseEntity<Map<Integer, Customer>> getAllCustomers(){
-        Map<Integer,Customer> customers =  customerRepo.getAllCustomers();
-        return new ResponseEntity<Map<Integer,Customer>>(customers, HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<Iterable<Customer>> getAllCustomers() {
+        Iterable<Customer> customers = customerRepo.findAll();
+        return ResponseEntity.ok(customers);
     }
 
-    @GetMapping("/customer/{customerId}")
-    @ResponseBody
-    public ResponseEntity<Customer> getCustomer(@PathVariable int customerId){
-        Customer customer = customerRepo.getCustomer(customerId);
-        return new ResponseEntity<Customer>(customer, HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/addCustomer",consumes = {"application/json"},produces = {"application/json"})
-    @ResponseBody
-    public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer, UriComponentsBuilder builder){
-        customerRepo.addCustomer(customer);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(builder.path("/addCustomer/{id}").buildAndExpand(customer.getId()).toUri());
-        return new ResponseEntity<Customer>(headers, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/updateCustomer")
-    @ResponseBody
-    public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer){
-        if(customer != null){
-            customerRepo.updateCustomer(customer);
+    @GetMapping("/{id}")
+    public ResponseEntity<Customer> getCustomer(@PathVariable String id) {
+        if (id != null) {
+            Optional<Customer> customer = customerRepo.findById(id);
+            return customer.isPresent() ? ResponseEntity.ok(customer.get()) : (ResponseEntity<Customer>) ResponseEntity.ok();
         }
-        return new ResponseEntity<Customer>(customer, HttpStatus.OK);
+
+        return (ResponseEntity<Customer>) ResponseEntity.ok();
     }
 
-    @DeleteMapping("/delete/{id}")
-    @ResponseBody
-    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id){
-        customerRepo.deleteCustomer(id);
-        return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+    @PostMapping(consumes = {"application/json"}, produces = {"application/json"})
+    public ResponseEntity<String> addCustomer(@RequestBody Customer customer) {
+        if (customer != null) {
+            customerRepo.save(customer);
+        }
+        assert customer != null;
+        return ResponseEntity.ok(customer.getId());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer, @PathVariable String id) {
+        if (id != null) {
+            Optional<Customer> savedCustomer = customerRepo.findById(id);
+            if (savedCustomer.isPresent()) {
+                Customer updatedCustomer = savedCustomer.get();
+                updatedCustomer.setFirstName(customer.getFirstName());
+                updatedCustomer.setLastName(customer.getLastName());
+                updatedCustomer.setPhone(customer.getPhone());
+                updatedCustomer.setLogin(customer.getLogin());
+                updatedCustomer.setPassword(customer.getPassword());
+                customerRepo.save(updatedCustomer);
+                return ResponseEntity.ok(updatedCustomer);
+            }
+        }
+        return (ResponseEntity<Customer>) ResponseEntity.badRequest();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteCustomer(@PathVariable String id) {
+        customerRepo.deleteById(id);
     }
 }

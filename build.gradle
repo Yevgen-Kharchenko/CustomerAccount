@@ -1,59 +1,3 @@
-//plugins {
-//	id 'org.springframework.boot' version '2.2.2.RELEASE'
-//	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-//	id 'org.asciidoctor.convert' version '1.5.8'
-//	id 'java'
-//}
-//
-//group = 'com.example'
-//version = '0.0.1-SNAPSHOT'
-//sourceCompatibility = '1.8'
-//
-//configurations {
-//	developmentOnly
-//	runtimeClasspath {
-//		extendsFrom developmentOnly
-//	}
-//	compileOnly {
-//		extendsFrom annotationProcessor
-//	}
-//}
-//
-//repositories {
-//	mavenCentral()
-//}
-//
-//ext {
-//	set('snippetsDir', file("build/generated-snippets"))
-//}
-//
-//dependencies {
-//	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis
-//	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.2.2.RELEASE'
-//
-//	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-//	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
-//	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-//	compileOnly 'org.projectlombok:lombok'
-//	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//	annotationProcessor 'org.projectlombok:lombok'
-//	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-//		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-//	}
-//	testImplementation 'io.projectreactor:reactor-test'
-//	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-//
-//}
-//
-//test {
-//	outputs.dir snippetsDir
-//	useJUnitPlatform()
-//}
-//
-//asciidoctor {
-//	inputs.dir snippetsDir
-//	dependsOn test
-//}
 plugins {
 	id 'org.springframework.boot' version '2.1.6.RELEASE'
 	id 'java'
@@ -76,8 +20,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation group: 'org.apache.commons', name: 'commons-pool2', version: '2.6.2'
 	implementation group: 'redis.clients', name: 'jedis', version: '2.9.3'
+	compileOnly 'org.projectlombok:lombok:1.18.8'
+	annotationProcessor 'org.projectlombok:lombok:1.18.8'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api'
-
+}
+test {
+	useJUnitPlatform()
 }

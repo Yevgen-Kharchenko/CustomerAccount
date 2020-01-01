@@ -10,20 +10,20 @@ import org.springframework.data.redis.core.RedisTemplate;
 @SpringBootApplication
 public class CustomerAccountApplication {
 
-	@Bean
-	JedisConnectionFactory jedisConnectionFactory(){
-		return new JedisConnectionFactory();
-	}
+    @Bean
+    JedisConnectionFactory jedisConnectionFactory() {
+        return new JedisConnectionFactory();
+    }
 
-	@Bean
-	RedisTemplate<String, Customer> redisTemplate(){
-		RedisTemplate<String,Customer> redisTemplate = new RedisTemplate<String, Customer>();
-		redisTemplate.setConnectionFactory(jedisConnectionFactory());
-		return redisTemplate;
-	}
+    @Bean
+    RedisTemplate<String, Customer> redisTemplate() {
+        RedisTemplate<String, Customer> redisTemplate = new RedisTemplate<String, Customer>();
+        redisTemplate.setConnectionFactory(jedisConnectionFactory());
+        return redisTemplate;
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(CustomerAccountApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(CustomerAccountApplication.class, args);
+    }
 
 }
