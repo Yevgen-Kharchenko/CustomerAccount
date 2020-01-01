@@ -13,7 +13,7 @@ import java.util.Optional;
 public class CustomerController {
 
     @Autowired
-    CustomerRepo customerRepo;
+    private CustomerRepo customerRepo;
 
     @GetMapping
     public ResponseEntity<Iterable<Customer>> getAllCustomers() {
